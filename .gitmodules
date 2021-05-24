@@ -1,0 +1,3 @@
+[submodule "hardy-weinberg"]
+	path = hardy-weinberg
+	url = https://github.com/gianbrar/hardy-weinberg
