@@ -8,7 +8,7 @@ var t = 1;
 var pops = [];
 var WIN = 500;
 var mpercent = .03125;
-const phenotypes = "aAm"
+var phenotypes = "aAm";
 var dominantP = [-1], mutantP = [-1], recessiveP = [-1];
 var canvas = document.getElementById("sim");
 var ctx = canvas.getContext("2d");
