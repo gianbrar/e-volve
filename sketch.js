@@ -231,10 +231,12 @@ function draw() {
         
         if (pops[i] == undefined) {return;}
         pops[i].age++;
-        //if (pops[i].age == t*2700) {pops.splice(i,1);}
+        if (pops[i].age == t*2700) {pops.splice(i,1);}
     }
     for (let i = 0; i < spls.length; i++) {
         fill(spls[i].clr);
-        rect(500, (i*50)+250, spls[i].subpop.length*15, 30);
+        let energySum = 0;
+        for (let j = 0; j < spls[i].subpop.length; j++) {energySum += spls[i].subpop[j].energy;}
+        rect(500, (i*50)+250, energySum, 30);
     }
 }
