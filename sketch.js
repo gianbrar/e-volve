@@ -190,7 +190,7 @@ function Console(cin) {
             spls.push(new species(cin[2], cin[3], isProducer));
         }
     }
-	else if (cin[0] == "ls") {for (let [i,k] of pops.entries()) {cout(">ID="+k.id+" SPECIES="+k.spc.name+" GENOTYPE="+k.gtype+" GENERATION=F"+k.gen+" GENDER="+k.gender[1]+" COLOR="+k.clr+(i != pops.length ? ',' : ''));}}
+	else if (cin[0] == "ls") {for (let [i,k] of pops.entries()) {cout(">ID="+k.id+" SPECIES="+k.spc.name+" ENERGY="+k.energy+" GENOTYPE="+k.gtype+" GENERATION=F"+k.gen+" GENDER="+k.gender[1]+" COLOR="+k.clr+(i != pops.length ? ',' : ''));}}
 	else if (cin[0] == "tick") {t = sab(cin,t,"TICK SPEED");}
 	else if (cin[0] == "maxgen") {maxGen = sab(cin,maxGen,"MAX GENERATION");}
 	else {error("Unknown command");}
@@ -198,31 +198,43 @@ function Console(cin) {
 }
 
 function setup() {
-    createCanvas(WIN,WIN);
+    createCanvas(750,WIN);
+    setTimeout(main, 1000);
 }
 
-async function draw() {
-    background(200);
+function main() {
     for (let i = 0; i < pops.length; i++) {
-        fill("rgb("+pops[i].clr.join()+')');
-        rect(pops[i].pos[0],pops[i].pos[1],20,20);
-        for (let j = 0; j < 2; j++) {pops[i].pos[j] += Math.floor((Math.random()*3)-1)*(new Array(0,5,10,25,50)[Math.floor(Math.random()*5)]);if (pops[i].pos[j] >WIN) pops[i].pos[j] -= 50;else if (pops[i].pos[j]<0) {pops[i].pos[j]+=50;}}
-        pops[i].energy -= 0.03125;
-        if (pops[i].spc.producer) {pops[i].energy += 1000}
+    for (let j = 0; j < 2; j++) {pops[i].pos[j] += Math.floor((Math.random()*3)-1)*(new Array(0,5,10,25,50)[Math.floor(Math.random()*5)]);if (pops[i].pos[j] >WIN) pops[i].pos[j] -= 50;else if (pops[i].pos[j]<0) {pops[i].pos[j]+=50;}}
+        pops[i].energy -= 0.5;
+        if (pops[i].spc.producer) {pops[i].energy += 2}
         else if (pops[i].energy <= 0) {pops[i].age = (t*2700)-1;}
-        else {
-            let speciesTarget = pops[i].spc.edibleSpecies[0];
-            console.log(speciesTarget.subpop);
-            let target = speciesTarget.subpop[Math.floor(Math.random*(speciesTarget.subpop.length))];
+        else if (pops[i].energy < 50) {
+            let speciesTarget = pops[i].spc.edibleSpecies[Math.floor(Math.random()*pops[i].spc.edibleSpecies.length)];
+            let target = speciesTarget.subpop[Math.floor(Math.random()*(speciesTarget.subpop.length))]
             if (target == undefined) {continue;}
             if (Math.floor(Math.random()*2)) {
                 pops[i].energy += target.energy*(.1**speciesTarget.TrophicLevel);
                 pops.splice(pops.indexOf(target),1);
                 speciesTarget.subpop.splice(speciesTarget.subpop.indexOf(target), 1);
             }
-            else {pops[i].energy -= 0.03125}
+            else {pops[i].energy -= 0.5;}
         }
+    }
+    setTimeout(main, t*100);
+}
+
+function draw() {
+    background(200);
+    for (let i = 0; i < pops.length; i++) {
+        fill("rgb("+pops[i].clr.join()+')');
+        rect(pops[i].pos[0],pops[i].pos[1],20,20);
+        
+        if (pops[i] == undefined) {return;}
         pops[i].age++;
-        if (pops[i].age == t*2700) {pops.splice(i,1);}
+        //if (pops[i].age == t*2700) {pops.splice(i,1);}
+    }
+    for (let i = 0; i < spls.length; i++) {
+        fill(spls[i].clr);
+        rect(500, (i*50)+250, spls[i].subpop.length*15, 30);
     }
 }

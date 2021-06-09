@@ -5,7 +5,7 @@ OMNIVORE = new species("Omnivore",[51, 204, 204],false,2);
 HERBIVORE.edibleSpecies.push(PRODUCER);
 OMNIVORE.edibleSpecies.push(PRODUCER,HERBIVORE,CARNIVORE);
 CARNIVORE.edibleSpecies.push(HERBIVORE)
-spls.push(HERBIVORE,OMNIVORE,CARNIVORE);
+spls.push(CARNIVORE,OMNIVORE,HERBIVORE,PRODUCER);
 
 function Producer() {PRODUCER.subpop.push(new Pop([Math.floor(Math.random()*WIN),Math.floor(Math.random()*WIN)], [0,153,51],null,findSpecies("Producer")));}
 function herbivore() {HERBIVORE.subpop.push(new Pop([Math.floor(Math.random()*WIN),Math.floor(Math.random()*WIN)], [102, 255, 102],null,findSpecies("Herbivore")));}
